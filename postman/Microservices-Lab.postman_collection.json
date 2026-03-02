@@ -1,0 +1,332 @@
+{
+  "info": {
+    "name": "Microservices Lab",
+    "_postman_id": "microservices-lab-2026",
+    "description": "SLIIT SE4010 - Microservices Lab | Item, Order, Payment services via API Gateway (port 8080)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "gateway",
+      "value": "http://localhost:8080",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Item Service",
+      "description": "Endpoints for the Item Service routed through the API Gateway -> http://item-service:8081",
+      "item": [
+        {
+          "name": "Get All Items",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gateway}}/items",
+              "host": ["{{gateway}}"],
+              "path": ["items"]
+            },
+            "description": "Returns the list of all items in memory."
+          },
+          "response": [
+            {
+              "name": "200 OK - All Items",
+              "status": "OK",
+              "code": 200,
+              "originalRequest": {
+                "method": "GET",
+                "url": { "raw": "{{gateway}}/items" }
+              },
+              "body": "[\n  { \"id\": 1, \"name\": \"Book\" },\n  { \"id\": 2, \"name\": \"Laptop\" },\n  { \"id\": 3, \"name\": \"Phone\" }\n]"
+            }
+          ]
+        },
+        {
+          "name": "Get Item by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gateway}}/items/1",
+              "host": ["{{gateway}}"],
+              "path": ["items", "1"]
+            },
+            "description": "Returns a single item by its ID. Change the ID in the URL as needed."
+          },
+          "response": [
+            {
+              "name": "200 OK - Item Found",
+              "status": "OK",
+              "code": 200,
+              "originalRequest": {
+                "method": "GET",
+                "url": { "raw": "{{gateway}}/items/1" }
+              },
+              "body": "{ \"id\": 1, \"name\": \"Book\" }"
+            },
+            {
+              "name": "404 Not Found",
+              "status": "Not Found",
+              "code": 404,
+              "originalRequest": {
+                "method": "GET",
+                "url": { "raw": "{{gateway}}/items/999" }
+              },
+              "body": ""
+            }
+          ]
+        },
+        {
+          "name": "Add New Item",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Headphones\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{gateway}}/items",
+              "host": ["{{gateway}}"],
+              "path": ["items"]
+            },
+            "description": "Creates a new item. Returns the created item with its assigned ID."
+          },
+          "response": [
+            {
+              "name": "201 Created - Item Added",
+              "status": "Created",
+              "code": 201,
+              "originalRequest": {
+                "method": "POST",
+                "url": { "raw": "{{gateway}}/items" }
+              },
+              "body": "{ \"id\": 4, \"name\": \"Headphones\" }"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Order Service",
+      "description": "Endpoints for the Order Service routed through the API Gateway -> http://order-service:8082",
+      "item": [
+        {
+          "name": "Get All Orders",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gateway}}/orders",
+              "host": ["{{gateway}}"],
+              "path": ["orders"]
+            },
+            "description": "Returns the list of all placed orders."
+          },
+          "response": [
+            {
+              "name": "200 OK - All Orders",
+              "status": "OK",
+              "code": 200,
+              "originalRequest": {
+                "method": "GET",
+                "url": { "raw": "{{gateway}}/orders" }
+              },
+              "body": "[\n  { \"id\": 1, \"item\": \"Laptop\", \"quantity\": 2, \"customerId\": \"C001\", \"status\": \"PENDING\" }\n]"
+            }
+          ]
+        },
+        {
+          "name": "Get Order by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gateway}}/orders/1",
+              "host": ["{{gateway}}"],
+              "path": ["orders", "1"]
+            },
+            "description": "Returns a single order by its ID."
+          },
+          "response": [
+            {
+              "name": "200 OK - Order Found",
+              "status": "OK",
+              "code": 200,
+              "originalRequest": {
+                "method": "GET",
+                "url": { "raw": "{{gateway}}/orders/1" }
+              },
+              "body": "{ \"id\": 1, \"item\": \"Laptop\", \"quantity\": 2, \"customerId\": \"C001\", \"status\": \"PENDING\" }"
+            },
+            {
+              "name": "404 Not Found",
+              "status": "Not Found",
+              "code": 404,
+              "originalRequest": {
+                "method": "GET",
+                "url": { "raw": "{{gateway}}/orders/999" }
+              },
+              "body": ""
+            }
+          ]
+        },
+        {
+          "name": "Place New Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"item\": \"Laptop\",\n  \"quantity\": 2,\n  \"customerId\": \"C001\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{gateway}}/orders",
+              "host": ["{{gateway}}"],
+              "path": ["orders"]
+            },
+            "description": "Places a new order. The service assigns an ID and sets status to PENDING automatically."
+          },
+          "response": [
+            {
+              "name": "201 Created - Order Placed",
+              "status": "Created",
+              "code": 201,
+              "originalRequest": {
+                "method": "POST",
+                "url": { "raw": "{{gateway}}/orders" }
+              },
+              "body": "{ \"id\": 1, \"item\": \"Laptop\", \"quantity\": 2, \"customerId\": \"C001\", \"status\": \"PENDING\" }"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Payment Service",
+      "description": "Endpoints for the Payment Service routed through the API Gateway -> http://payment-service:8083",
+      "item": [
+        {
+          "name": "Get All Payments",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gateway}}/payments",
+              "host": ["{{gateway}}"],
+              "path": ["payments"]
+            },
+            "description": "Returns the list of all processed payments."
+          },
+          "response": [
+            {
+              "name": "200 OK - All Payments",
+              "status": "OK",
+              "code": 200,
+              "originalRequest": {
+                "method": "GET",
+                "url": { "raw": "{{gateway}}/payments" }
+              },
+              "body": "[\n  { \"id\": 1, \"orderId\": 1, \"amount\": 1299.99, \"method\": \"CARD\", \"status\": \"SUCCESS\" }\n]"
+            }
+          ]
+        },
+        {
+          "name": "Get Payment by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gateway}}/payments/1",
+              "host": ["{{gateway}}"],
+              "path": ["payments", "1"]
+            },
+            "description": "Returns the status and details of a single payment by its ID."
+          },
+          "response": [
+            {
+              "name": "200 OK - Payment Found",
+              "status": "OK",
+              "code": 200,
+              "originalRequest": {
+                "method": "GET",
+                "url": { "raw": "{{gateway}}/payments/1" }
+              },
+              "body": "{ \"id\": 1, \"orderId\": 1, \"amount\": 1299.99, \"method\": \"CARD\", \"status\": \"SUCCESS\" }"
+            },
+            {
+              "name": "404 Not Found",
+              "status": "Not Found",
+              "code": 404,
+              "originalRequest": {
+                "method": "GET",
+                "url": { "raw": "{{gateway}}/payments/999" }
+              },
+              "body": ""
+            }
+          ]
+        },
+        {
+          "name": "Process Payment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orderId\": 1,\n  \"amount\": 1299.99,\n  \"method\": \"CARD\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{gateway}}/payments/process",
+              "host": ["{{gateway}}"],
+              "path": ["payments", "process"]
+            },
+            "description": "Processes a payment for an order. The service assigns an ID and sets status to SUCCESS automatically."
+          },
+          "response": [
+            {
+              "name": "201 Created - Payment Processed",
+              "status": "Created",
+              "code": 201,
+              "originalRequest": {
+                "method": "POST",
+                "url": { "raw": "{{gateway}}/payments/process" }
+              },
+              "body": "{ \"id\": 1, \"orderId\": 1, \"amount\": 1299.99, \"method\": \"CARD\", \"status\": \"SUCCESS\" }"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

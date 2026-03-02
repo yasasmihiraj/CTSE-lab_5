@@ -1,0 +1,3 @@
+repo link = https://github.com/yasasmihiraj/CTSE-lab_5.git
+
+All the API testing evidence has been exported as JSON and stored in the Postman folder.
